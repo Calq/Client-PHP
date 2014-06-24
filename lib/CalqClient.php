@@ -337,7 +337,7 @@ class CalqClient {
      */
     public function identify($actor) {
         if($actor != $this->_actor) {
-            if($this->_isAnon) {
+            if(!$this->_isAnon) {
                 throw new Exception('identify(...) must not be called more than once for the same user.');
             }
             $oldActor = $this->_actor;
@@ -391,13 +391,22 @@ class CalqClient {
         
         $this->writeCookieState();
     }
+	
+	///////////////////////////// Properties /////////////////////////////
+	
+	/**
+	 * Gets the actor this instance is for.
+	 */
+	public function getActor() {
+		return $this->_actor;
+	}
     
     ///////////////////////////// Internal util methods /////////////////////////////
 
     /**
      * Generates a v4 UUID to identify this Calq user (until identify(...) is called).
      */
-    private static function createAnonymousUserId() {
+    public static function createAnonymousUserId() {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 
             // 32 bits for "time_low"
