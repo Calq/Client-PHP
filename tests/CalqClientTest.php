@@ -78,6 +78,7 @@ class CalqClientTest extends PHPUnit_Framework_TestCase
 	 * Tests that state is correctly being persisted and read back.
 	 */
 	public function testStatePersistence() {
+		$this->resetCookieState();
 	
 		$actor = $this->generateTestActor();
 
@@ -88,6 +89,39 @@ class CalqClientTest extends PHPUnit_Framework_TestCase
 		$calq2->parseCookieState($_COOKIE["_calq_d"]);
 		
 		$this->assertEquals($calq->getActor(), $calq2->getActor(), 'Actors should match after loading state');
+	}
+	
+	/**
+	 * Tests that clear is working correctly.
+	 */
+	public function testClear() {
+		$this->resetCookieState();
+		
+		$calq = new CalqClient(CalqClient::createAnonymousUserId(), $this->_writeKey);
+		$actor = $calq->getActor();
+		
+		$calq->clear();
+		
+		$this->assertNotEquals($calq->getActor(), $actor, 'Actors should not match after clear');
+	}
+	
+	/**
+	 * Tests some end to end API calls.
+	 */
+	public function testEndToEnd() {
+		$this->resetCookieState();
+		
+		$calq = new CalqClient(CalqClient::createAnonymousUserId(), $this->_writeKey);
+		$calq->track('PHP Test Action (Anon)');
+		
+		$calq->identify($this->generateTestActor());
+		
+		$calq->track('PHP Test Action');
+		$calq->trackSale('PHP Test Sale', null, 'USD', 9.99);
+		
+		$calq->profile(array( '$email' => 'test@notarealemail.com'));
+		
+		$calq->flush();
 	}
 
 	/**
