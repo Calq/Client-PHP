@@ -130,7 +130,11 @@ class CalqClient {
         if(isset($options["cookieDomain"])) {
             $this->_cookieDomain = $options["cookieDomain"];
         }
-    }
+		// Any really advanced options? 
+		if(isset($options["apiProcessor"])) {
+            $this->_api = $options["apiProcessor"];
+        }
+	}
     
     /**
      * Flushes the current queue when we are destroyed.
@@ -278,7 +282,7 @@ class CalqClient {
         if(!isset($properties)) {
             $properties = array();
         }
-
+		
         $merged_properties = array_merge($this->_globalProperties, $properties);
     
         $ipAddress = self::getSourceIpAddress();
@@ -383,7 +387,7 @@ class CalqClient {
      * Clears the current session and resets to being an anonymous user.
      */
     public function clear() {
-        $this->_actor = $self::createAnonymousUserId();
+        $this->_actor = self::createAnonymousUserId();
         $this->_hasTracked = false;
         $this->_isAnon = true;
         $this->_globalProperties = array();
@@ -433,7 +437,7 @@ class CalqClient {
      * will be behind proxy / caches / load balancers etc. Used for Calq's geolocation.
      */
     private static function getSourceIpAddress() {
-        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        $ipAddress = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;	// Won't be set in unit tests, so check
         
         if(isset($_SERVER['HTTP_X_REAL_IP'])) {
             $ipAddress = $_SERVER['HTTP_X_REAL_IP'];
