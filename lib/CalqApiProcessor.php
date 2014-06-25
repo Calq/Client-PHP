@@ -74,17 +74,18 @@ class CalqApiProcessor {
      * @param array $userProperties
      */
     public function track($actor, $action, $apiParams, $userProperties) {
-        if ($apiParams == null) {
+        if ($apiParams === null) {
             throw new Exception('$apiParams must be specified');
         }
-        if ($userProperties == null) {
+        if ($userProperties === null) {
             throw new Exception('$userProperties must be specified');
         }
         
         $apiParams[ReservedApiProperties::$actor] = $actor;
         $apiParams[ReservedApiProperties::$actionName] = $action;
         $apiParams[ReservedApiProperties::$writeKey] = $this->_writeKey;
-        $apiParams[ReservedApiProperties::$userProperties] = $userProperties;
+        $apiParams[ReservedApiProperties::$userProperties] = 
+			empty($userProperties) ? new stdClass() : $userProperties;	// json_encode gives array if empty
         $apiParams[ReservedApiProperties::$timestamp] = gmdate(DATE_ISO8601);
 
         $this->enqueue('Track', $apiParams);
@@ -96,7 +97,7 @@ class CalqApiProcessor {
      * @param array $userProperties
      */
     public function profile($actor, $userProperties) {
-        if ($userProperties == null || count($userProperties) == 0) {
+        if ($userProperties === null || count($userProperties) == 0) {
             throw new Exception('$userProperties must be specified');
         }
             
