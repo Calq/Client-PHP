@@ -1,0 +1,19 @@
+{
+    "name": "calq/calq",
+	"version": "1.0.3",
+    "type": "library",
+    "description": "Calq API client for PHP",
+    "keywords": ["calq"],
+    "homepage": "https://github.com/Calq/Client-PHP",
+    "license": "Apache-2.0",
+    "require": {
+        "php": ">=5.3.0",
+		"lib-curl": "*",
+		"ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Calq\\": "lib"
+        }
+    }
+}
