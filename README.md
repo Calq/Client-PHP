@@ -6,6 +6,16 @@ The full quick start and reference docs can be found at: https://www.calq.io/doc
 Installation
 ------------
 
+###Using composer (recommended)
+
+Install the [latest release](https://packagist.org/packages/calq/calq) of the library through Composer with the following command:
+
+```bash
+composer require calq/calq
+```
+
+###Old-style copy-and-paste
+
 Grab the [latest release](https://github.com/Calq/Client-PHP/releases) and add it to your project.
 
 You will need to include the CalqClient library where you intend to use it. The library requires PHP 5.2 or higher.
